@@ -13,6 +13,12 @@
 		623E0ECF2BDFC1FC00D79B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 623E0ECE2BDFC1FC00D79B06 /* Assets.xcassets */; };
 		623E0EDD2BDFC1FD00D79B06 /* WeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EDC2BDFC1FD00D79B06 /* WeatherTests.swift */; };
 		623E0EFB2BDFC2EB00D79B06 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EFA2BDFC2EB00D79B06 /* SplashViewController.swift */; };
+		623E0EFF2BDFC74100D79B06 /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EFE2BDFC74100D79B06 /* ShowAlert.swift */; };
+		623E0F012BDFC7AE00D79B06 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F002BDFC7AE00D79B06 /* SplashViewModel.swift */; };
+		623E0F042BDFE73200D79B06 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F032BDFE73200D79B06 /* HomeViewController.swift */; };
+		623E0F092BDFE90D00D79B06 /* SplashScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F082BDFE90D00D79B06 /* SplashScreenBuilder.swift */; };
+		623E0F0B2BDFEB7800D79B06 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */; };
+		623E0F0D2BDFEBE800D79B06 /* HomeScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +41,12 @@
 		623E0ED82BDFC1FD00D79B06 /* WeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		623E0EDC2BDFC1FD00D79B06 /* WeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTests.swift; sourceTree = "<group>"; };
 		623E0EFA2BDFC2EB00D79B06 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		623E0EFE2BDFC74100D79B06 /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
+		623E0F002BDFC7AE00D79B06 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		623E0F032BDFE73200D79B06 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		623E0F082BDFE90D00D79B06 /* SplashScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenBuilder.swift; sourceTree = "<group>"; };
+		623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +88,7 @@
 		623E0EC12BDFC1FC00D79B06 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				623E0EFC2BDFC70E00D79B06 /* Utils */,
 				623E0EF82BDFC2D400D79B06 /* Modules */,
 				623E0EF72BDFC29700D79B06 /* Resources */,
 				623E0EF62BDFC23100D79B06 /* CoreData */,
@@ -121,6 +134,7 @@
 		623E0EF82BDFC2D400D79B06 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				623E0F022BDFE71F00D79B06 /* HomeScreen */,
 				623E0EF92BDFC2DA00D79B06 /* SplashScreen */,
 			);
 			path = Modules;
@@ -130,8 +144,28 @@
 			isa = PBXGroup;
 			children = (
 				623E0EFA2BDFC2EB00D79B06 /* SplashViewController.swift */,
+				623E0F002BDFC7AE00D79B06 /* SplashViewModel.swift */,
+				623E0F082BDFE90D00D79B06 /* SplashScreenBuilder.swift */,
 			);
 			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		623E0EFC2BDFC70E00D79B06 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				623E0EFE2BDFC74100D79B06 /* ShowAlert.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		623E0F022BDFE71F00D79B06 /* HomeScreen */ = {
+			isa = PBXGroup;
+			children = (
+				623E0F032BDFE73200D79B06 /* HomeViewController.swift */,
+				623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */,
+				623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */,
+			);
+			path = HomeScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,9 +267,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				623E0EFF2BDFC74100D79B06 /* ShowAlert.swift in Sources */,
+				623E0F092BDFE90D00D79B06 /* SplashScreenBuilder.swift in Sources */,
+				623E0F0B2BDFEB7800D79B06 /* HomeViewModel.swift in Sources */,
 				623E0ECD2BDFC1FC00D79B06 /* Weather.xcdatamodeld in Sources */,
 				623E0EC32BDFC1FC00D79B06 /* AppDelegate.swift in Sources */,
+				623E0F012BDFC7AE00D79B06 /* SplashViewModel.swift in Sources */,
+				623E0F0D2BDFEBE800D79B06 /* HomeScreenBuilder.swift in Sources */,
 				623E0EC52BDFC1FC00D79B06 /* SceneDelegate.swift in Sources */,
+				623E0F042BDFE73200D79B06 /* HomeViewController.swift in Sources */,
 				623E0EFB2BDFC2EB00D79B06 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
