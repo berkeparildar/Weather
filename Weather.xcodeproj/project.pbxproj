@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		62216FB72BE2848E00FA68BE /* WeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FB62BE2848E00FA68BE /* WeatherAPI.swift */; };
+		62216FBC2BE28C9800FA68BE /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 62216FBB2BE28C9800FA68BE /* KeychainAccess */; };
+		62216FBE2BE28FAF00FA68BE /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FBD2BE28FAF00FA68BE /* HomeModel.swift */; };
 		623E0EC32BDFC1FC00D79B06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EC22BDFC1FC00D79B06 /* AppDelegate.swift */; };
 		623E0EC52BDFC1FC00D79B06 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EC42BDFC1FC00D79B06 /* SceneDelegate.swift */; };
 		623E0ECD2BDFC1FC00D79B06 /* Weather.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 623E0ECB2BDFC1FC00D79B06 /* Weather.xcdatamodeld */; };
@@ -19,6 +22,11 @@
 		623E0F092BDFE90D00D79B06 /* SplashScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F082BDFE90D00D79B06 /* SplashScreenBuilder.swift */; };
 		623E0F0B2BDFEB7800D79B06 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */; };
 		623E0F0D2BDFEBE800D79B06 /* HomeScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */; };
+		6260DB352BE26B53006EB110 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6260DB342BE26B53006EB110 /* NetworkService.swift */; };
+		6260DB382BE26BA5006EB110 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 6260DB372BE26BA5006EB110 /* CombineMoya */; };
+		6260DB3A2BE26BA5006EB110 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 6260DB392BE26BA5006EB110 /* Moya */; };
+		6260DB3C2BE26BA5006EB110 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 6260DB3B2BE26BA5006EB110 /* ReactiveMoya */; };
+		6260DB3E2BE26BA5006EB110 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 6260DB3D2BE26BA5006EB110 /* RxMoya */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		62216FB62BE2848E00FA68BE /* WeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPI.swift; sourceTree = "<group>"; };
+		62216FBD2BE28FAF00FA68BE /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		623E0EBF2BDFC1FC00D79B06 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		623E0EC22BDFC1FC00D79B06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		623E0EC42BDFC1FC00D79B06 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +57,7 @@
 		623E0F082BDFE90D00D79B06 /* SplashScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenBuilder.swift; sourceTree = "<group>"; };
 		623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBuilder.swift; sourceTree = "<group>"; };
+		6260DB342BE26B53006EB110 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +65,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6260DB3A2BE26BA5006EB110 /* Moya in Frameworks */,
+				6260DB382BE26BA5006EB110 /* CombineMoya in Frameworks */,
+				6260DB3E2BE26BA5006EB110 /* RxMoya in Frameworks */,
+				6260DB3C2BE26BA5006EB110 /* ReactiveMoya in Frameworks */,
+				62216FBC2BE28C9800FA68BE /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		62216FB52BE2847700FA68BE /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				62216FB62BE2848E00FA68BE /* WeatherAPI.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
 		623E0EB62BDFC1FB00D79B06 = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +117,7 @@
 				623E0EF72BDFC29700D79B06 /* Resources */,
 				623E0EF62BDFC23100D79B06 /* CoreData */,
 				623E0EF52BDFC22500D79B06 /* App */,
+				6260DB332BE26B39006EB110 /* Network */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -161,11 +186,29 @@
 		623E0F022BDFE71F00D79B06 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
+				623E0F0E2BE01AA300D79B06 /* Cell */,
 				623E0F032BDFE73200D79B06 /* HomeViewController.swift */,
 				623E0F0A2BDFEB7800D79B06 /* HomeViewModel.swift */,
 				623E0F0C2BDFEBE800D79B06 /* HomeScreenBuilder.swift */,
+				62216FBD2BE28FAF00FA68BE /* HomeModel.swift */,
 			);
 			path = HomeScreen;
+			sourceTree = "<group>";
+		};
+		623E0F0E2BE01AA300D79B06 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		6260DB332BE26B39006EB110 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				62216FB52BE2847700FA68BE /* DTO */,
+				6260DB342BE26B53006EB110 /* NetworkService.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,6 +227,13 @@
 			dependencies = (
 			);
 			name = Weather;
+			packageProductDependencies = (
+				6260DB372BE26BA5006EB110 /* CombineMoya */,
+				6260DB392BE26BA5006EB110 /* Moya */,
+				6260DB3B2BE26BA5006EB110 /* ReactiveMoya */,
+				6260DB3D2BE26BA5006EB110 /* RxMoya */,
+				62216FBB2BE28C9800FA68BE /* KeychainAccess */,
+			);
 			productName = Weather;
 			productReference = 623E0EBF2BDFC1FC00D79B06 /* Weather.app */;
 			productType = "com.apple.product-type.application";
@@ -234,6 +284,10 @@
 				Base,
 			);
 			mainGroup = 623E0EB62BDFC1FB00D79B06;
+			packageReferences = (
+				6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */,
+				62216FBA2BE28C9800FA68BE /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = 623E0EC02BDFC1FC00D79B06 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -267,12 +321,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6260DB352BE26B53006EB110 /* NetworkService.swift in Sources */,
 				623E0EFF2BDFC74100D79B06 /* ShowAlert.swift in Sources */,
 				623E0F092BDFE90D00D79B06 /* SplashScreenBuilder.swift in Sources */,
 				623E0F0B2BDFEB7800D79B06 /* HomeViewModel.swift in Sources */,
+				62216FB72BE2848E00FA68BE /* WeatherAPI.swift in Sources */,
 				623E0ECD2BDFC1FC00D79B06 /* Weather.xcdatamodeld in Sources */,
 				623E0EC32BDFC1FC00D79B06 /* AppDelegate.swift in Sources */,
 				623E0F012BDFC7AE00D79B06 /* SplashViewModel.swift in Sources */,
+				62216FBE2BE28FAF00FA68BE /* HomeModel.swift in Sources */,
 				623E0F0D2BDFEBE800D79B06 /* HomeScreenBuilder.swift in Sources */,
 				623E0EC52BDFC1FC00D79B06 /* SceneDelegate.swift in Sources */,
 				623E0F042BDFE73200D79B06 /* HomeViewController.swift in Sources */,
@@ -551,6 +608,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		62216FBA2BE28C9800FA68BE /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		62216FBB2BE28C9800FA68BE /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 62216FBA2BE28C9800FA68BE /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		6260DB372BE26BA5006EB110 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		6260DB392BE26BA5006EB110 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		6260DB3B2BE26BA5006EB110 /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = ReactiveMoya;
+		};
+		6260DB3D2BE26BA5006EB110 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6260DB362BE26BA5006EB110 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		623E0ECB2BDFC1FC00D79B06 /* Weather.xcdatamodeld */ = {
