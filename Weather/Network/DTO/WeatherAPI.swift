@@ -13,9 +13,11 @@ struct WeatherAPI: Decodable {
     var name: String
     var dt: Int
     var timezone: Int
+    var sys: SystemData
 }
 
 struct WeatherDescription: Decodable {
+    var id: Int
     var main: String
     var description: String
 }
@@ -26,4 +28,9 @@ struct WeatherData: Decodable {
     var tempMin: Double
     var tempMax: Double
     var humidity: Double
+}
+
+struct SystemData: Decodable {
+    var sunset: Int
+    var sunrise: Int
 }

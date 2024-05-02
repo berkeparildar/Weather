@@ -70,7 +70,11 @@ final class HomeViewModel: NSObject {
                 switch result {
                 case .success(let fetchedWeather):
                     var weather = WeatherThumbnail.convertToThumbnail(weatherAPI: fetchedWeather)
-                    weather.name = self.searchResults[index].title
+                    var title = self.searchResults[index].title
+                    if title.contains(",") {
+                        title = String(title.split(separator: ",").first!)
+                    }
+                    weather.name = title
                     completion(.success(weather))
                 case .failure(_):
                     print("There was an error.")
