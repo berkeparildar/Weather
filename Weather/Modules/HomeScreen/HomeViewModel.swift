@@ -11,6 +11,7 @@ import Moya
 
 protocol HomeViewModelDelegate: AnyObject {
     func updateSearchResults(results: [String])
+    func updateWeatherTable(weathers: [WeatherThumbnail])
 }
 
 final class HomeViewModel: NSObject {
@@ -28,6 +29,33 @@ final class HomeViewModel: NSObject {
     
     func performSearch(query: String) {
         completer.queryFragment = query
+    }
+    
+    func fetchSavedLoations() {
+        let savedCoordinates = DataManager.shared.fetchCoordinates()
+        print(savedCoordinates.count)
+        var weathers = [WeatherThumbnail]()
+        let group = DispatchGroup()
+        savedCoordinates.forEach { coordinate in
+            group.enter()
+            fetchWeather(latitude: coordinate.0, longitude: coordinate.1) { result in
+                defer {
+                    group.leave() // Leave the dispatch group when the fetchWeather closure completes
+                }
+                switch result {
+                case .success(let fetchedWeather):
+                    var weather = WeatherThumbnail.convertToThumbnail(weatherAPI: fetchedWeather)
+                    weather.name = coordinate.2
+                    weathers.append(weather)
+                    print("appended")
+                case .failure(_):
+                    print("Error!")
+                }
+            }
+        }
+        group.notify(queue: .main) {
+            self.delegate?.updateWeatherTable(weathers: weathers)
+        }
     }
     
     func locationDetails(for index: Int, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
@@ -75,6 +103,7 @@ final class HomeViewModel: NSObject {
                         title = String(title.split(separator: ",").first!)
                     }
                     weather.name = title
+                    DataManager.shared.addCoordinate(coordinate: (resultCoordinates.latitude, resultCoordinates.longitude, title))
                     completion(.success(weather))
                 case .failure(_):
                     print("There was an error.")

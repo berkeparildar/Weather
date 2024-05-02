@@ -31,6 +31,7 @@ class HomeViewController: UIViewController {
         setupSearchTableView()
         setupViews()
         setupConstraints()
+        viewModel.fetchSavedLoations()
     }
     
     func setupSearchController() {
@@ -53,7 +54,7 @@ class HomeViewController: UIViewController {
         searchTableView = UITableView()
         searchTableView.dataSource = self
         searchTableView.delegate = self
-        searchTableView.isHidden = false
+        searchTableView.isHidden = true
         searchTableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -89,6 +90,12 @@ extension HomeViewController: HomeViewModelDelegate {
     func updateSearchResults(results: [String]) {
         searchResults = results
         searchTableView.reloadData()
+    }
+    
+    func updateWeatherTable(weathers: [WeatherThumbnail]) {
+        print("here")
+        self.weathers = weathers
+        self.weatherTableView.reloadData()
     }
 }
 
@@ -130,7 +137,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return 136
     }
-
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.getWeather(index: indexPath.row) { [weak self] result in
@@ -138,7 +145,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             switch result {
             case .success(let weather):
                 self.weathers.append(weather)
-                print("Name: \(weather.name), temp: \(weather.currentTemp), highestTemp: \(weather.highestTemp)")
+                print("Name: \(weather.name), temp: \(weather.currentTemp), highestTemp: \(weather.highestTemp), isDay: \(weather.isDay)")
                 searchController.isActive = false
                 searchResults.removeAll()
                 weatherTableView.reloadData()
