@@ -34,6 +34,11 @@ class HomeViewController: UIViewController {
         viewModel.fetchSavedLoations()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
+    }
+    
     func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -138,19 +143,25 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         return 136
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.getWeather(index: indexPath.row) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let weather):
-                self.weathers.append(weather)
-                print("Name: \(weather.name), temp: \(weather.currentTemp), highestTemp: \(weather.highestTemp), isDay: \(weather.isDay)")
-                searchController.isActive = false
-                searchResults.removeAll()
-                weatherTableView.reloadData()
-            case .failure(_):
-                print("There was an error")
+        if tableView == weatherTableView {
+            let weatherView = WeatherScreenBuilder.create()
+            weatherView.configureWithWeather()
+            navigationController?.pushViewController(weatherView, animated: true)
+        }
+        else {
+            viewModel.getWeather(index: indexPath.row) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let weather):
+                    self.weathers.append(weather)
+                    print("Name: \(weather.name), temp: \(weather.currentTemp), highestTemp: \(weather.highestTemp), isDay: \(weather.isDay)")
+                    searchController.isActive = false
+                    searchResults.removeAll()
+                    weatherTableView.reloadData()
+                case .failure(_):
+                    print("There was an error")
+                }
             }
         }
     }

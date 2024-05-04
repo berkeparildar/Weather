@@ -13,6 +13,11 @@
 		62216FC02BE2E93C00FA68BE /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FBF2BE2E93C00FA68BE /* WeatherTableViewCell.swift */; };
 		62216FC22BE4025F00FA68BE /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FC12BE4025F00FA68BE /* CoreDataStack.swift */; };
 		62216FC42BE4028500FA68BE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FC32BE4028500FA68BE /* DataManager.swift */; };
+		62216FC72BE4FD2A00FA68BE /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FC62BE4FD2A00FA68BE /* WeatherViewController.swift */; };
+		62216FC92BE4FD3900FA68BE /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FC82BE4FD3900FA68BE /* WeatherViewModel.swift */; };
+		62216FCB2BE4FD4700FA68BE /* WeatherScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FCA2BE4FD4700FA68BE /* WeatherScreenBuilder.swift */; };
+		62216FCE2BE512C000FA68BE /* HourlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FCD2BE512C000FA68BE /* HourlyCollectionViewCell.swift */; };
+		62216FD02BE5144B00FA68BE /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62216FCF2BE5144B00FA68BE /* WeatherModel.swift */; };
 		623E0EC32BDFC1FC00D79B06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EC22BDFC1FC00D79B06 /* AppDelegate.swift */; };
 		623E0EC52BDFC1FC00D79B06 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623E0EC42BDFC1FC00D79B06 /* SceneDelegate.swift */; };
 		623E0ECD2BDFC1FC00D79B06 /* Weather.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 623E0ECB2BDFC1FC00D79B06 /* Weather.xcdatamodeld */; };
@@ -48,6 +53,11 @@
 		62216FBF2BE2E93C00FA68BE /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		62216FC12BE4025F00FA68BE /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		62216FC32BE4028500FA68BE /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		62216FC62BE4FD2A00FA68BE /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		62216FC82BE4FD3900FA68BE /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		62216FCA2BE4FD4700FA68BE /* WeatherScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherScreenBuilder.swift; sourceTree = "<group>"; };
+		62216FCD2BE512C000FA68BE /* HourlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyCollectionViewCell.swift; sourceTree = "<group>"; };
+		62216FCF2BE5144B00FA68BE /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		623E0EBF2BDFC1FC00D79B06 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		623E0EC22BDFC1FC00D79B06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		623E0EC42BDFC1FC00D79B06 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +105,26 @@
 				62216FB62BE2848E00FA68BE /* WeatherAPI.swift */,
 			);
 			path = DTO;
+			sourceTree = "<group>";
+		};
+		62216FC52BE4FD0E00FA68BE /* WeatherScreen */ = {
+			isa = PBXGroup;
+			children = (
+				62216FCC2BE512A600FA68BE /* Cell */,
+				62216FC62BE4FD2A00FA68BE /* WeatherViewController.swift */,
+				62216FC82BE4FD3900FA68BE /* WeatherViewModel.swift */,
+				62216FCA2BE4FD4700FA68BE /* WeatherScreenBuilder.swift */,
+				62216FCF2BE5144B00FA68BE /* WeatherModel.swift */,
+			);
+			path = WeatherScreen;
+			sourceTree = "<group>";
+		};
+		62216FCC2BE512A600FA68BE /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				62216FCD2BE512C000FA68BE /* HourlyCollectionViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		623E0EB62BDFC1FB00D79B06 = {
@@ -167,6 +197,7 @@
 		623E0EF82BDFC2D400D79B06 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				62216FC52BE4FD0E00FA68BE /* WeatherScreen */,
 				623E0F022BDFE71F00D79B06 /* HomeScreen */,
 				623E0EF92BDFC2DA00D79B06 /* SplashScreen */,
 			);
@@ -331,6 +362,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				62216FC22BE4025F00FA68BE /* CoreDataStack.swift in Sources */,
+				62216FC92BE4FD3900FA68BE /* WeatherViewModel.swift in Sources */,
+				62216FC72BE4FD2A00FA68BE /* WeatherViewController.swift in Sources */,
 				62216FC42BE4028500FA68BE /* DataManager.swift in Sources */,
 				6260DB352BE26B53006EB110 /* NetworkService.swift in Sources */,
 				623E0EFF2BDFC74100D79B06 /* ShowAlert.swift in Sources */,
@@ -338,7 +371,9 @@
 				623E0F092BDFE90D00D79B06 /* SplashScreenBuilder.swift in Sources */,
 				623E0F0B2BDFEB7800D79B06 /* HomeViewModel.swift in Sources */,
 				62216FB72BE2848E00FA68BE /* WeatherAPI.swift in Sources */,
+				62216FD02BE5144B00FA68BE /* WeatherModel.swift in Sources */,
 				623E0ECD2BDFC1FC00D79B06 /* Weather.xcdatamodeld in Sources */,
+				62216FCB2BE4FD4700FA68BE /* WeatherScreenBuilder.swift in Sources */,
 				623E0EC32BDFC1FC00D79B06 /* AppDelegate.swift in Sources */,
 				623E0F012BDFC7AE00D79B06 /* SplashViewModel.swift in Sources */,
 				62216FBE2BE28FAF00FA68BE /* HomeModel.swift in Sources */,
@@ -346,6 +381,7 @@
 				623E0EC52BDFC1FC00D79B06 /* SceneDelegate.swift in Sources */,
 				623E0F042BDFE73200D79B06 /* HomeViewController.swift in Sources */,
 				623E0EFB2BDFC2EB00D79B06 /* SplashViewController.swift in Sources */,
+				62216FCE2BE512C000FA68BE /* HourlyCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
