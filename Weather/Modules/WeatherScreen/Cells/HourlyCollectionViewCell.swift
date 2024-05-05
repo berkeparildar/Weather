@@ -10,8 +10,7 @@ import UIKit
 class HourlyCollectionViewCell: UICollectionViewCell {
     private let hourLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
+        label.textAlignment = .center
         label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -19,13 +18,13 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     private let weatherImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private let degreeLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
         label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -46,12 +45,17 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             hourLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            hourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            weatherImage.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 20),
+            hourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            hourLabel.widthAnchor.constraint(equalToConstant: 24),
+            hourLabel.heightAnchor.constraint(equalToConstant: 24),
+            weatherImage.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 4),
+            weatherImage.widthAnchor.constraint(equalToConstant: 24),
+            weatherImage.heightAnchor.constraint(equalToConstant: 24),
             weatherImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             degreeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            degreeLabel.topAnchor.constraint(equalTo: weatherImage.bottomAnchor, constant: 20),
-            degreeLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
+            degreeLabel.topAnchor.constraint(equalTo: weatherImage.bottomAnchor, constant: 4),
+            degreeLabel.widthAnchor.constraint(equalToConstant: 24),
+            degreeLabel.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
     

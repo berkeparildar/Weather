@@ -11,7 +11,7 @@ final class WeatherViewController: UIViewController {
     
     var viewModel: WeatherViewModel!
     
-    var forecasts: [HourlyForecast] = [
+    var hourlyForecasts: [HourlyForecast] = [
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
@@ -20,6 +20,14 @@ final class WeatherViewController: UIViewController {
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
         HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
+    ]
+    
+    var dailyForecasts: [DailyForecast] = [
+        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 7, highestTemp: 10, currentTemp: 8),
+        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 2, highestTemp: 14, currentTemp: 11),
+        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 3, highestTemp: 22, currentTemp: 5),
+        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 7, highestTemp: 24, currentTemp: 20),
+        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 11, highestTemp: 33, currentTemp: 30),
     ]
     
     private lazy var backgroundView: UIView = {
@@ -76,11 +84,12 @@ final class WeatherViewController: UIViewController {
     private lazy var hourlyForecast: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 16, height: 120)
+        layout.itemSize = CGSize(width: 32, height: 96)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         layout.minimumLineSpacing = 32
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "forecastCell")
@@ -88,7 +97,20 @@ final class WeatherViewController: UIViewController {
         return collectionView
     }()
     
-    private lazy var forecastSection: UIView = {
+    private lazy var dailyForecast: UITableView = {
+        let tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.isScrollEnabled = false
+        tableView.allowsSelection = false
+        tableView.allowsFocus = false
+        tableView.register(DailyTableViewCell.self, forCellReuseIdentifier: "dailyCell")
+        tableView.backgroundColor = .clear
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
+    private lazy var hourlyForecastSection: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 18
         view.layer.masksToBounds = true
@@ -96,25 +118,55 @@ final class WeatherViewController: UIViewController {
         return view
     }()
     
-    private lazy var forecastBlur: UIVisualEffectView = {
+    private lazy var hourlyForecastBlur: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .light)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.translatesAutoresizingMaskIntoConstraints = false
         return blurView
     }()
     
-    private lazy var forecastTitle: UILabel = {
+    private lazy var hourlyForecastTitle: UILabel = {
         let label = UILabel()
         label.text = "Hourly Forecast"
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var seperatorView: UIView = {
+    private lazy var hourlyForecastSeperator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
+        return view
+    }()
+    
+    private lazy var dailyForecastSection: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 18
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var dailyForecastBlur: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        return blurView
+    }()
+    
+    private lazy var dailyForecastTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Daily Forecast"
+        label.font = .systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var dailyForecastSeperator: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .gray
         return view
     }()
     
@@ -127,8 +179,6 @@ final class WeatherViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         baseView.alpha = 0
-        
-        // Animate the alpha property of the baseView to 1 with a duration of 0.5 seconds
         UIView.animate(withDuration: 1) {
             self.baseView.alpha = 1
         }
@@ -142,11 +192,16 @@ final class WeatherViewController: UIViewController {
         view.addSubview(degreeLabel)
         view.addSubview(minMaxLabel)
         view.addSubview(descriptionLabel)
-        view.addSubview(forecastSection)
-        forecastSection.addSubview(forecastBlur)
-        forecastSection.addSubview(forecastTitle)
-        forecastSection.addSubview(seperatorView)
-        forecastSection.addSubview(hourlyForecast)
+        view.addSubview(hourlyForecastSection)
+        view.addSubview(dailyForecastSection)
+        hourlyForecastSection.addSubview(hourlyForecastBlur)
+        hourlyForecastSection.addSubview(hourlyForecastTitle)
+        hourlyForecastSection.addSubview(hourlyForecastSeperator)
+        hourlyForecastSection.addSubview(hourlyForecast)
+        dailyForecastSection.addSubview(dailyForecastBlur)
+        dailyForecastSection.addSubview(dailyForecastTitle)
+        dailyForecastSection.addSubview(dailyForecastSeperator)
+        dailyForecastSection.addSubview(dailyForecast)
     }
     
     private func setupConstraints() {
@@ -161,11 +216,6 @@ final class WeatherViewController: UIViewController {
             baseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             baseView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             baseView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            /*
-             blurEffect.topAnchor.constraint(equalTo: baseView.topAnchor),
-             blurEffect.bottomAnchor.constraint(equalTo: baseView.bottomAnchor),
-             blurEffect.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
-             blurEffect.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),*/
             
             nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -48),
@@ -179,29 +229,53 @@ final class WeatherViewController: UIViewController {
             minMaxLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             minMaxLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 4),
             
-            forecastSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            forecastSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            forecastSection.topAnchor.constraint(equalTo: minMaxLabel.bottomAnchor, constant: 42),
+            hourlyForecastSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            hourlyForecastSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            hourlyForecastSection.topAnchor.constraint(equalTo: minMaxLabel.bottomAnchor, constant: 32),
             
-            forecastBlur.topAnchor.constraint(equalTo: forecastSection.topAnchor),
-            forecastBlur.bottomAnchor.constraint(equalTo: forecastSection.bottomAnchor),
-            forecastBlur.leadingAnchor.constraint(equalTo: forecastSection.leadingAnchor),
-            forecastBlur.trailingAnchor.constraint(equalTo: forecastSection.trailingAnchor),
+            hourlyForecastBlur.topAnchor.constraint(equalTo: hourlyForecastSection.topAnchor),
+            hourlyForecastBlur.bottomAnchor.constraint(equalTo: hourlyForecastSection.bottomAnchor),
+            hourlyForecastBlur.leadingAnchor.constraint(equalTo: hourlyForecastSection.leadingAnchor),
+            hourlyForecastBlur.trailingAnchor.constraint(equalTo: hourlyForecastSection.trailingAnchor),
             
             
-            forecastTitle.topAnchor.constraint(equalTo: forecastSection.topAnchor, constant: 16),
-            forecastTitle.leadingAnchor.constraint(equalTo: forecastSection.leadingAnchor, constant: 16),
+            hourlyForecastTitle.topAnchor.constraint(equalTo: hourlyForecastSection.topAnchor, constant: 8),
+            hourlyForecastTitle.leadingAnchor.constraint(equalTo: hourlyForecastSection.leadingAnchor, constant: 16),
             
-            seperatorView.topAnchor.constraint(equalTo: forecastTitle.bottomAnchor, constant: 4),
-            seperatorView.leadingAnchor.constraint(equalTo: forecastSection.leadingAnchor, constant: 16),
-            seperatorView.trailingAnchor.constraint(equalTo: forecastSection.trailingAnchor),
-            seperatorView.heightAnchor.constraint(equalToConstant: 1),
+            hourlyForecastSeperator.topAnchor.constraint(equalTo: hourlyForecastTitle.bottomAnchor, constant: 4),
+            hourlyForecastSeperator.leadingAnchor.constraint(equalTo: hourlyForecastSection.leadingAnchor, constant: 16),
+            hourlyForecastSeperator.trailingAnchor.constraint(equalTo: hourlyForecastSection.trailingAnchor),
+            hourlyForecastSeperator.heightAnchor.constraint(equalToConstant: 0.5),
             
-            hourlyForecast.topAnchor.constraint(equalTo: seperatorView.bottomAnchor, constant: 4),
-            hourlyForecast.heightAnchor.constraint(equalToConstant: 120),
-            hourlyForecast.leadingAnchor.constraint(equalTo: forecastSection.leadingAnchor),
-            hourlyForecast.trailingAnchor.constraint(equalTo: forecastSection.trailingAnchor),
-            hourlyForecast.bottomAnchor.constraint(equalTo: forecastSection.bottomAnchor, constant: -4)
+            hourlyForecast.topAnchor.constraint(equalTo: hourlyForecastSeperator.bottomAnchor, constant: 4),
+            hourlyForecast.heightAnchor.constraint(equalToConstant: 104),
+            hourlyForecast.leadingAnchor.constraint(equalTo: hourlyForecastSection.leadingAnchor),
+            hourlyForecast.trailingAnchor.constraint(equalTo: hourlyForecastSection.trailingAnchor),
+            hourlyForecast.bottomAnchor.constraint(equalTo: hourlyForecastSection.bottomAnchor, constant: -4),
+            
+            dailyForecastSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            dailyForecastSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            dailyForecastSection.topAnchor.constraint(equalTo: hourlyForecastSection.bottomAnchor, constant: 32),
+            
+            dailyForecastBlur.topAnchor.constraint(equalTo: dailyForecastSection.topAnchor),
+            dailyForecastBlur.bottomAnchor.constraint(equalTo: dailyForecastSection.bottomAnchor),
+            dailyForecastBlur.leadingAnchor.constraint(equalTo: dailyForecastSection.leadingAnchor),
+            dailyForecastBlur.trailingAnchor.constraint(equalTo: dailyForecastSection.trailingAnchor),
+            
+            
+            dailyForecastTitle.topAnchor.constraint(equalTo: dailyForecastSection.topAnchor, constant: 8),
+            dailyForecastTitle.leadingAnchor.constraint(equalTo: dailyForecastSection.leadingAnchor, constant: 16),
+            
+            dailyForecastSeperator.topAnchor.constraint(equalTo: dailyForecastTitle.bottomAnchor, constant: 4),
+            dailyForecastSeperator.leadingAnchor.constraint(equalTo: dailyForecastSection.leadingAnchor, constant: 16),
+            dailyForecastSeperator.trailingAnchor.constraint(equalTo: dailyForecastSection.trailingAnchor),
+            dailyForecastSeperator.heightAnchor.constraint(equalToConstant: 0.5),
+            
+            dailyForecast.topAnchor.constraint(equalTo: dailyForecastSeperator.bottomAnchor, constant: 4),
+            dailyForecast.heightAnchor.constraint(equalToConstant: 220),
+            dailyForecast.leadingAnchor.constraint(equalTo: dailyForecastSection.leadingAnchor),
+            dailyForecast.trailingAnchor.constraint(equalTo: dailyForecastSection.trailingAnchor),
+            dailyForecast.bottomAnchor.constraint(equalTo: dailyForecastSection.bottomAnchor, constant: -4)
         ])
     }
     
@@ -229,7 +303,19 @@ extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "forecastCell", for: indexPath) as! HourlyCollectionViewCell
-        cell.configure(forecast: forecasts[indexPath.row])
+        cell.configure(forecast: hourlyForecasts[indexPath.row])
+        return cell
+    }
+}
+
+extension WeatherViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        dailyForecasts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dailyCell", for: indexPath) as! DailyTableViewCell
+        cell.configure(dailyForecast: dailyForecasts[indexPath.row], weekHigh: 33, weekLow: 2)
         return cell
     }
 }

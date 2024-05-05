@@ -20,3 +20,11 @@ struct HourlyForecast {
     var icon: UIImage
     var degree: String
 }
+
+struct DailyForecast {
+    var day: String
+    var icon: UIImage
+    var lowestTemp: Int
+    var highestTemp: Int
+    var currentTemp: Int
+}
