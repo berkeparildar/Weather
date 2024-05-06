@@ -34,3 +34,18 @@ struct SystemData: Decodable {
     var sunset: Int
     var sunrise: Int
 }
+
+struct ForecastAPI: Decodable {
+    var list: [ForecastWeather]
+    var city: LocalInfo
+}
+
+struct ForecastWeather: Decodable {
+    var weather: [WeatherDescription]
+    var main: WeatherData
+    var dtTxt: String
+}
+
+struct LocalInfo: Decodable {
+    var timezone: Int
+}

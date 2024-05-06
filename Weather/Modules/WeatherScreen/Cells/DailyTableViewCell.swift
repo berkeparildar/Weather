@@ -47,17 +47,7 @@ class DailyTableViewCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    private lazy var progressBar: UIProgressView = {
-        let progressBar = UIProgressView(progressViewStyle: .default)
-        progressBar.transform = CGAffineTransform(scaleX: 1, y: 4)
-        progressBar.layer.cornerRadius = 2
-        progressBar.clipsToBounds = true
-        progressBar.trackTintColor = UIColor.lightGray.withAlphaComponent(0.3)
-        progressBar.translatesAutoresizingMaskIntoConstraints = false
-        return progressBar
-    }()
-    
+
     private lazy var scalaView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +76,6 @@ class DailyTableViewCell: UITableViewCell {
             UIColor.orange.cgColor
         ]
         gradientLayer.locations = [0.0, 0.25, 0.5, 1.0]
-        gradientLayer.frame = view.bounds
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 1)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 1)
         view.layer.insertSublayer(gradientLayer, at: 0)
@@ -114,9 +103,25 @@ class DailyTableViewCell: UITableViewCell {
         gradientContainer.addSubview(gradientView)
         addSubview(gradientContainer)
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientView.layer.sublayers?.first?.frame = gradientView.bounds
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        if let gradientLayer = gradientView.layer.sublayers?.first as? CAGradientLayer {
+                gradientLayer.frame = gradientView.bounds
+            } else {
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.colors = [
+                    UIColor.cyan.cgColor,
+                    UIColor.green.cgColor,
+                    UIColor.yellow.cgColor,
+                    UIColor.orange.cgColor
+                ]
+                gradientLayer.locations = [0.0, 0.25, 0.5, 1.0]
+                gradientLayer.startPoint = CGPoint(x: 0.0, y: 1)
+                gradientLayer.endPoint = CGPoint(x: 1.0, y: 1)
+                gradientLayer.frame = gradientView.bounds
+                gradientView.layer.insertSublayer(gradientLayer, at: 0)
+            }
     }
     
     private func setupConstraints() {
@@ -125,12 +130,11 @@ class DailyTableViewCell: UITableViewCell {
         defaultTrailingConstraint = gradientContainer.trailingAnchor.constraint(equalTo: scalaView.trailingAnchor)
         
         NSLayoutConstraint.activate([
-            
             dayLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             dayLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             
             weatherImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            weatherImage.leadingAnchor.constraint(equalTo: dayLabel.trailingAnchor, constant: 60),
+            weatherImage.trailingAnchor.constraint(equalTo: self.centerXAnchor, constant: -30),
             
             minTempLabel.trailingAnchor.constraint(equalTo: scalaView.leadingAnchor, constant: -16),
             minTempLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -170,9 +174,11 @@ class DailyTableViewCell: UITableViewCell {
             gradientContainer.trailingAnchor.constraint(equalTo: scalaView.trailingAnchor, constant: CGFloat(-highestDifference * multiplier))
         ])
         dayLabel.text = dailyForecast.day
-        weatherImage.image = dailyForecast.icon
+        let iconImage = UIImage(systemName: dailyForecast.icon)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        var multicolorImage = iconImage?.applyingSymbolConfiguration(config)
+        weatherImage.image = multicolorImage
         minTempLabel.text = "\(dailyForecast.lowestTemp)°"
         maxTempLabel.text = "\(dailyForecast.highestTemp)°"
     }
-
 }

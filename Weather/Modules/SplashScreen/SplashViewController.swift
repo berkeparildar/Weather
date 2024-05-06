@@ -13,14 +13,13 @@ class SplashViewController: UIViewController, ShowAlert {
     
     var background: UIView = {
         var backgroundView = UIView()
-        backgroundView.backgroundColor = .lightGray
+        backgroundView.backgroundColor = .black
         return backgroundView
     }()
     
     var splashLogo: UIImageView = {
         var logo = UIImageView()
-        logo.image = UIImage(systemName: "globe")
-        logo.tintColor = .systemPurple
+        logo.image = UIImage(named: "weather")
         return logo
     }()
     
@@ -53,7 +52,6 @@ class SplashViewController: UIViewController, ShowAlert {
 extension SplashViewController: SplashViewModelDelegate {
     
     func navigateToHomePage() {
-        print("Here")
         guard let window = self.view.window else { return }
         let homeVC = HomeScreenBuilder.create()
         let navigationController = UINavigationController(rootViewController: homeVC)

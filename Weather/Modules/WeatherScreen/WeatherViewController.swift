@@ -10,25 +10,10 @@ import UIKit
 final class WeatherViewController: UIViewController {
     
     var viewModel: WeatherViewModel!
-    
-    var hourlyForecasts: [HourlyForecast] = [
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-        HourlyForecast(hour: "18", icon: UIImage(systemName: "cloud.drizzle.fill")!, degree: "22"),
-    ]
-    
-    var dailyForecasts: [DailyForecast] = [
-        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 7, highestTemp: 10, currentTemp: 8),
-        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 2, highestTemp: 14, currentTemp: 11),
-        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 3, highestTemp: 22, currentTemp: 5),
-        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 7, highestTemp: 24, currentTemp: 20),
-        DailyForecast(day: "Mon", icon: UIImage(systemName: "cloud.drizzle.fill")!, lowestTemp: 11, highestTemp: 33, currentTemp: 30),
-    ]
+    var hourylForecastArray = [HourlyForecast]()
+    var dailyForecastArray = [DailyForecast]()
+    var weeklyHigh = -100
+    var weeklyLow = 100
     
     private lazy var backgroundView: UIView = {
         let view = UIView()
@@ -53,31 +38,58 @@ final class WeatherViewController: UIViewController {
         return blurView
     }()
     
+    private lazy var blurScreen: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        return blurView
+    }()
+    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 30)
+        label.text = " "
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
     private lazy var degreeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 60)
+        label.text = " "
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
+        label.text = " "
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
     private lazy var minMaxLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
+        label.text = " "
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -104,6 +116,8 @@ final class WeatherViewController: UIViewController {
         tableView.isScrollEnabled = false
         tableView.allowsSelection = false
         tableView.allowsFocus = false
+        tableView.separatorColor = .white
+        tableView.rowHeight = 44
         tableView.register(DailyTableViewCell.self, forCellReuseIdentifier: "dailyCell")
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -166,12 +180,20 @@ final class WeatherViewController: UIViewController {
     private lazy var dailyForecastSeperator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .gray
+        view.backgroundColor = .white
         return view
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        isLoading(true)
+        viewModel.getWeather()
         setupViews()
         setupConstraints()
     }
@@ -187,7 +209,6 @@ final class WeatherViewController: UIViewController {
     private func setupViews() {
         view.addSubview(backgroundView)
         view.addSubview(baseView)
-        //baseView.addSubview(blurEffect)
         view.addSubview(nameLabel)
         view.addSubview(degreeLabel)
         view.addSubview(minMaxLabel)
@@ -202,6 +223,9 @@ final class WeatherViewController: UIViewController {
         dailyForecastSection.addSubview(dailyForecastTitle)
         dailyForecastSection.addSubview(dailyForecastSeperator)
         dailyForecastSection.addSubview(dailyForecast)
+        view.addSubview(blurScreen)
+        blurScreen.contentView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
     }
     
     private func setupConstraints() {
@@ -211,6 +235,12 @@ final class WeatherViewController: UIViewController {
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            blurScreen.topAnchor.constraint(equalTo: view.topAnchor),
+            blurScreen.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            blurScreen.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            blurScreen.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
             
             baseView.topAnchor.constraint(equalTo: view.topAnchor),
             baseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -275,7 +305,10 @@ final class WeatherViewController: UIViewController {
             dailyForecast.heightAnchor.constraint(equalToConstant: 220),
             dailyForecast.leadingAnchor.constraint(equalTo: dailyForecastSection.leadingAnchor),
             dailyForecast.trailingAnchor.constraint(equalTo: dailyForecastSection.trailingAnchor),
-            dailyForecast.bottomAnchor.constraint(equalTo: dailyForecastSection.bottomAnchor, constant: -4)
+            dailyForecast.bottomAnchor.constraint(equalTo: dailyForecastSection.bottomAnchor, constant: -4),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: blurScreen.contentView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: blurScreen.contentView.centerYAnchor)
         ])
     }
     
@@ -283,39 +316,69 @@ final class WeatherViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
-    func configureWithWeather() {
-        nameLabel.text = "Turgutlu"
-        degreeLabel.text = "24°"
-        descriptionLabel.text = "Partly Cloudy"
-        minMaxLabel.text = "H:27° L:12°"
-        baseView.image = UIImage(named: "cloudsnight")
+}
+
+extension WeatherViewController {
+    func isLoading(_ loading: Bool) {
+        if loading {
+            blurScreen.alpha = 1
+            activityIndicator.startAnimating()
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.blurScreen.alpha = 0
+            }
+            activityIndicator.stopAnimating()
+        }
+    }
+    
+    func didLoad() {
+        isLoading(false)
     }
 }
 
 extension WeatherViewController: WeatherViewModelDelegate {
-    
+    func weatherOutput(weather: WeatherDetail) {
+        dailyForecastArray = weather.dailyForecasts
+        hourylForecastArray = weather.hourlyForecasts
+        nameLabel.text = weather.name
+        degreeLabel.text = "\(weather.degree)°"
+        descriptionLabel.text = weather.description
+        minMaxLabel.text = weather.minMaxInfo
+        baseView.image = UIImage(named: weather.backgroundName)
+        dailyForecastArray.forEach { element in
+            if element.highestTemp > weeklyHigh {
+                weeklyHigh = element.highestTemp
+            }
+            if element.lowestTemp < weeklyLow {
+                weeklyLow = element.lowestTemp
+            }
+        }
+        hourlyForecast.reloadData()
+        dailyForecast.reloadData()
+        didLoad()
+    }
 }
 
 extension WeatherViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        8
+        hourylForecastArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "forecastCell", for: indexPath) as! HourlyCollectionViewCell
-        cell.configure(forecast: hourlyForecasts[indexPath.row])
+        cell.configure(forecast: hourylForecastArray[indexPath.row])
         return cell
     }
 }
 
 extension WeatherViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        dailyForecasts.count
+        dailyForecastArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dailyCell", for: indexPath) as! DailyTableViewCell
-        cell.configure(dailyForecast: dailyForecasts[indexPath.row], weekHigh: 33, weekLow: 2)
+        cell.configure(dailyForecast: dailyForecastArray[indexPath.row], weekHigh: weeklyHigh, weekLow: weeklyLow)
         return cell
     }
 }

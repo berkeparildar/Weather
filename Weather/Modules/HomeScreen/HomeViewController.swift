@@ -11,11 +11,9 @@ import KeychainAccess
 class HomeViewController: UIViewController {
     
     var viewModel: HomeViewModel!
-    
     var searchController: UISearchController!
     var searchTableView: UITableView!
     var weatherTableView: UITableView!
-    
     var searchResults: [String] = [] {
         didSet {
             searchTableView.isHidden = searchResults.isEmpty
@@ -23,8 +21,15 @@ class HomeViewController: UIViewController {
     }
     var weathers: [WeatherThumbnail] = []
     
+    lazy var searchView: UIView = {
+        let view = UIView(frame: view.safeAreaLayoutGuide.layoutFrame)
+        view.isHidden = true
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        showLoading()
         setupNavigationBar()
         setupSearchController()
         setupWeatherTableView()
@@ -39,6 +44,12 @@ class HomeViewController: UIViewController {
         setupNavigationBar()
     }
     
+    override func viewSafeAreaInsetsDidChange() {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.view.layoutIfNeeded()  // Forces the layout of the subviews immediately
+        }
+    }
+    
     func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -51,6 +62,7 @@ class HomeViewController: UIViewController {
     
     func setupNavigationBar() {
         self.title = "Weather"
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -67,6 +79,7 @@ class HomeViewController: UIViewController {
         weatherTableView = UITableView()
         weatherTableView.separatorStyle = .none
         weatherTableView.dataSource = self
+        weatherTableView.rowHeight = 136
         weatherTableView.delegate = self
         weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
         weatherTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +87,7 @@ class HomeViewController: UIViewController {
     
     func setupViews() {
         view.addSubview(weatherTableView)
+        view.addSubview(searchView)
         view.addSubview(searchTableView)
     }
     
@@ -98,9 +112,19 @@ extension HomeViewController: HomeViewModelDelegate {
     }
     
     func updateWeatherTable(weathers: [WeatherThumbnail]) {
-        print("here")
         self.weathers = weathers
         self.weatherTableView.reloadData()
+        didLoad()
+    }
+}
+
+extension HomeViewController: LoadingShowable {
+    func isLoading() {
+        LoadingView.shared.startLoading()
+    }
+    
+    func didLoad() {
+        LoadingView.shared.hideLoading()
     }
 }
 
@@ -114,6 +138,27 @@ extension HomeViewController: UISearchResultsUpdating, UISearchBarDelegate {
         self.searchResults.removeAll()
     }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchView.backgroundColor = .gray.withAlphaComponent(0)
+        searchView.isHidden = false
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.view.layoutIfNeeded()
+            self.searchView.backgroundColor = .black.withAlphaComponent(0.5)
+        }
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchView.backgroundColor = .black.withAlphaComponent(0.5)
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.view.layoutIfNeeded()
+            self.searchView.backgroundColor = .black.withAlphaComponent(0)
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            self.searchView.isHidden = true
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -136,17 +181,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == searchTableView {
-            return 44
-        }
-        return 136
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == weatherTableView {
-            let weatherView = WeatherScreenBuilder.create()
-            weatherView.configureWithWeather()
+            let weatherView = WeatherScreenBuilder.create(thumbnail: weathers[indexPath.row])
             navigationController?.pushViewController(weatherView, animated: true)
         }
         else {
@@ -155,16 +192,45 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 switch result {
                 case .success(let weather):
                     self.weathers.append(weather)
-                    print("Name: \(weather.name), temp: \(weather.currentTemp), highestTemp: \(weather.highestTemp), isDay: \(weather.isDay)")
                     searchController.isActive = false
                     searchResults.removeAll()
                     weatherTableView.reloadData()
-                case .failure(_):
-                    print("There was an error")
+                case .failure(let error):
+                    debugPrint(error.localizedDescription)
                 }
             }
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if tableView == weatherTableView {
+                viewModel.removeWeather(name: weathers[indexPath.row].name)
+                weathers.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if tableView == weatherTableView {
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, completionHandler) in
+                guard let self = self else { return }
+                self.viewModel.removeWeather(name: weathers[indexPath.row].name)
+                self.weathers.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                completionHandler(true)
+            }
+            let largeConfig = UIImage.SymbolConfiguration(pointSize: 17.0, weight: .bold, scale: .large)
+            deleteAction.image = UIImage(systemName: "trash", withConfiguration: largeConfig)?.withTintColor(.white, renderingMode: .alwaysTemplate).addBackgroundCircle(.systemRed)
+            deleteAction.backgroundColor = .systemBackground
+            deleteAction.title = "Delete"
+            let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+            return configuration
+        }
+        return nil
+    }
+    
 }
 
 

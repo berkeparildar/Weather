@@ -28,6 +28,10 @@ class WeatherTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -35,6 +39,10 @@ class WeatherTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -42,6 +50,10 @@ class WeatherTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 42)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -49,6 +61,10 @@ class WeatherTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -56,6 +72,10 @@ class WeatherTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.3
         return label
     }()
     
@@ -79,14 +99,14 @@ class WeatherTableViewCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             baseView.topAnchor.constraint(equalTo: self.topAnchor),
-            baseView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16),
             baseView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             baseView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            baseView.heightAnchor.constraint(equalToConstant: 120),
             
             blurEffect.topAnchor.constraint(equalTo: baseView.topAnchor),
-            blurEffect.bottomAnchor.constraint(equalTo: baseView.bottomAnchor),
             blurEffect.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
             blurEffect.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
+            blurEffect.heightAnchor.constraint(equalToConstant: 120),
             
             nameLabel.leadingAnchor.constraint(equalTo: baseView.leadingAnchor, constant: 20),
             nameLabel.topAnchor.constraint(equalTo: baseView.topAnchor, constant: 16),

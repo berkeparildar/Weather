@@ -11,6 +11,7 @@ import KeychainAccess
 
 enum NetworkService {
     case getWeatherData(latitude: Double, longitude: Double)
+    case getForecastData(latitude: Double, longitude: Double)
 }
 
 enum NetworkError: Error {
@@ -34,7 +35,12 @@ extension NetworkService: TargetType {
     }
     
     var path: String {
-        "/data/2.5/weather"
+        switch self {
+        case .getWeatherData:
+            return "/data/2.5/weather"
+        case .getForecastData:
+            return "/data/2.5/forecast"
+        }
     }
     
     var method: Moya.Method {
@@ -44,6 +50,14 @@ extension NetworkService: TargetType {
     var task: Task {
         switch self {
         case .getWeatherData(let latitude, let longitude):
+            let parameters: [String: Any] = [
+                "lat": latitude,
+                "lon": longitude,
+                "appid": loadAPIKey() ?? "",
+                "units": "metric"
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+        case .getForecastData(let latitude, let longitude):
             let parameters: [String: Any] = [
                 "lat": latitude,
                 "lon": longitude,

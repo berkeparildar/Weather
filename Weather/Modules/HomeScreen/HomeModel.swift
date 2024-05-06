@@ -16,6 +16,8 @@ struct WeatherThumbnail {
     var time: String
     var isDay: Bool
     var backgroundName: String
+    var latitude: Double
+    var longitude: Double
     
     static func convertToThumbnail(weatherAPI: WeatherAPI) -> WeatherThumbnail {
         let timezone = TimeZone(secondsFromGMT: weatherAPI.timezone)
@@ -31,7 +33,7 @@ struct WeatherThumbnail {
         } else {
             imageName += "nighttile"
         }
-        return WeatherThumbnail(name: weatherAPI.name, currentTemp: Int(weatherAPI.main.temp), highestTemp: Int(weatherAPI.main.tempMax), lowestTemp: Int(weatherAPI.main.tempMin), description: weatherAPI.weather.first!.description, time: localTime, isDay: isDay, backgroundName: imageName)
+        return WeatherThumbnail(name: weatherAPI.name, currentTemp: Int(weatherAPI.main.temp), highestTemp: Int(weatherAPI.main.tempMax), lowestTemp: Int(weatherAPI.main.tempMin), description: weatherAPI.weather.first!.description, time: localTime, isDay: isDay, backgroundName: imageName, latitude: 0.0, longitude: 0.0)
     }
 }
 

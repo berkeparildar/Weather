@@ -48,12 +48,12 @@ class HourlyCollectionViewCell: UICollectionViewCell {
             hourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
             hourLabel.widthAnchor.constraint(equalToConstant: 24),
             hourLabel.heightAnchor.constraint(equalToConstant: 24),
-            weatherImage.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 4),
-            weatherImage.widthAnchor.constraint(equalToConstant: 24),
-            weatherImage.heightAnchor.constraint(equalToConstant: 24),
+            weatherImage.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 8),
+            weatherImage.widthAnchor.constraint(equalToConstant: 20),
+            weatherImage.heightAnchor.constraint(equalToConstant: 20),
             weatherImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             degreeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            degreeLabel.topAnchor.constraint(equalTo: weatherImage.bottomAnchor, constant: 4),
+            degreeLabel.topAnchor.constraint(equalTo: weatherImage.bottomAnchor, constant: 8),
             degreeLabel.widthAnchor.constraint(equalToConstant: 24),
             degreeLabel.heightAnchor.constraint(equalToConstant: 24)
         ])
@@ -61,7 +61,10 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     func configure(forecast: HourlyForecast) {
         hourLabel.text = forecast.hour
-        weatherImage.image = forecast.icon
+        let iconImage = UIImage(systemName: forecast.icon)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        let multiColorImage = iconImage?.applyingSymbolConfiguration(config)
+        weatherImage.image = multiColorImage
         degreeLabel.text = forecast.degree
     }
     

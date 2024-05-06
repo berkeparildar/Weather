@@ -39,4 +39,37 @@ final class DataManager {
         newCoordinate.setValue(coordinate.2, forKey: "name")
         coreDataStack.saveContext()
     }
+    
+    func deleteAllCoordinates() {
+        let context = coreDataStack.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Coordinates")
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(batchDeleteRequest)
+            coreDataStack.saveContext()
+        } catch {
+            debugPrint("Error deleting coordinates: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteCoordinate(name: String) {
+        let context = coreDataStack.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Coordinates")
+        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+
+        do {
+            let results = try context.fetch(fetchRequest) as? [NSManagedObject] ?? []
+            for coordinate in results {
+                context.delete(coordinate)
+            }
+            coreDataStack.saveContext()
+            if results.isEmpty {
+                debugPrint("No coordinates found with the name \(name).")
+            } else {
+                debugPrint("Deleted \(results.count) coordinates with the name \(name).")
+            }
+        } catch {
+            debugPrint("Error deleting coordinates with name \(name): \(error.localizedDescription)")
+        }
+    }
 }

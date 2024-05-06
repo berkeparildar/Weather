@@ -33,7 +33,6 @@ final class HomeViewModel: NSObject {
     
     func fetchSavedLoations() {
         let savedCoordinates = DataManager.shared.fetchCoordinates()
-        print(savedCoordinates.count)
         var weathers = [WeatherThumbnail]()
         let group = DispatchGroup()
         savedCoordinates.forEach { coordinate in
@@ -46,10 +45,11 @@ final class HomeViewModel: NSObject {
                 case .success(let fetchedWeather):
                     var weather = WeatherThumbnail.convertToThumbnail(weatherAPI: fetchedWeather)
                     weather.name = coordinate.2
+                    weather.latitude = coordinate.0
+                    weather.longitude = coordinate.1
                     weathers.append(weather)
-                    print("appended")
-                case .failure(_):
-                    print("Error!")
+                case .failure(let error):
+                    debugPrint(error.localizedDescription)
                 }
             }
         }
@@ -103,6 +103,8 @@ final class HomeViewModel: NSObject {
                         title = String(title.split(separator: ",").first!)
                     }
                     weather.name = title
+                    weather.latitude = resultCoordinates.latitude
+                    weather.longitude = resultCoordinates.longitude
                     DataManager.shared.addCoordinate(coordinate: (resultCoordinates.latitude, resultCoordinates.longitude, title))
                     completion(.success(weather))
                 case .failure(_):
@@ -110,6 +112,10 @@ final class HomeViewModel: NSObject {
                 }
             }
         }
+    }
+    
+    func removeWeather(name: String) {
+        DataManager.shared.deleteCoordinate(name: name)
     }
 }
 

@@ -8,9 +8,9 @@
 import Foundation
 
 final class WeatherScreenBuilder {
-    static func create() -> WeatherViewController {
-        let viewModel = WeatherViewModel()
+    static func create(thumbnail: WeatherThumbnail) -> WeatherViewController {
         let viewController = WeatherViewController()
+        let viewModel = WeatherViewModel(delegate: viewController, weather: thumbnail)
         viewController.viewModel = viewModel
         viewModel.delegate = viewController
         return viewController

@@ -20,7 +20,6 @@ final class SplashViewModel {
     func checkInternetConnection() {
         let networkMonitor = NWPathMonitor()
         networkMonitor.pathUpdateHandler = { [weak self] path in
-            print("Here")
             if path.status == .satisfied {
                 DispatchQueue.main.async {
                     self?.delegate?.navigateToHomePage()
